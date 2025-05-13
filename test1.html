@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Meta and Page Setup -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grade Activities</title>
+
+    <!-- Inline CSS Styling -->
+    <style>
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 20px;
+            background-color: #000000;
+            color: #333;
+        }
+
+       
+        h1{
+            text-align: center;
+            color: #0554f2;
+        }
+
+        h4 {
+            text-align: center;
+            color: #0554f2;
+            margin-top: 30px;;
+        }
+
+        /* Button Styling */
+        button {
+            background-color: #0554f2;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+        }
+
+        
+        button:hover {
+            background-color: #0554f2;
+        }
+
+        /* Input Field Styling */
+        input[type="text"], input[type="number"] {
+            padding: 8px;
+            width: 200px;
+            border: 2px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        /* Container for Inputs */
+        .input-section {
+            display: flex;
+            flex-direction: column;
+            margin: 20px 0;
+        }
+
+        /* Table Styling */
+        table {
+            width: 100%;
+            align-self: center;
+            margin-top: 20px;
+            border-collapse: collapse;
+            background-color: white;
+            justify-content: center;
+            align-items: center;
+        
+        }
+
+        
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+       
+        th, td {
+            padding: 12px;
+            text-align: center;
+        }
+
+       
+        th {
+            background-color: #0554f2;
+            color: white;
+        }
+
+        
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        
+        tr:hover {
+            background-color: #ddd;
+        }
+
+        /* Error Message Styling */
+        .error {
+            color: red;
+            margin-top: 10px;
+        }
+
+        /* Main Container Styling */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #ffffffac;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            
+        }
+
+        /* Action Buttons Container */
+        .actions {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        /* Space Between Button Sections */
+        .actions div {
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Main Content Container -->
+<div class="container">
+    <h1>Grade Activities</h1>
+
+    <!-- Section for Action Buttons and Inputs -->
+    <div class="actions">
+        <div>
+            <button onclick="addTask()">Add Activity</button>
+            <input type="text" id="activity" placeholder="Enter activity name">
+            <input type="number" id="Weight" placeholder="Enter Weight">
+        </div>
+
+        <div>
+            <button onclick="addGrade()">Add Grade</button>
+            <input type="number" id="grade" placeholder="Enter grade">
+            <input type="number" id="activityNo" placeholder="Enter activity no">
+        </div>
+
+        <div>
+            <button onclick="deleteTask()">Delete Last Activity</button>
+        </div>
+
+        <div>
+            <button onclick="deleteSpecificTask()">Delete Activity</button>
+            <input type="number" id="deleteActivityNo" placeholder="Enter activity no">
+        </div>
+    </div>
+
+    <!-- Table for Displaying Activities -->
+    <table id="theTable">
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>Activity</th>
+                <th>Weight</th>
+                <th>Grade</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+    <!-- Error Message Output -->
+    <p class="error" id="ERR"></p>
+    <h4 class="footer" >Made with Love💗| By Saddam Hussain Safi</h4>
+</div>
+
+<!-- JavaScript Section -->
+<script>
+    // Counter for activity numbers
+    let noActivity = 0;
+
+    // Function to Add a New Activity Row
+    function addTask() {
+        let ACT = document.getElementById("activity");
+        let activity = ACT.value;
+
+        let ERR = document.getElementById("ERR");
+
+        // Validate activity input
+        if (activity == "") {
+            ERR.innerHTML = "Error Message: Activity name is rejected";
+            return;
+        } else {
+            ERR.innerHTML = "Error Message: ";
+        }
+
+        let PER = document.getElementById("Weight");
+        let Weight = parseInt(PER.value);
+
+        // Validate weight input
+        if (isNaN(Weight) || Weight < 1 || Weight > 100) {
+            ERR.innerHTML = "Error Message: Weight is rejected";
+            return;
+        }
+
+        // Create new row and cells
+        let TR = document.createElement("tr");
+        let TD1 = document.createElement("td");
+        let TXT1 = document.createTextNode(++noActivity);
+        TD1.appendChild(TXT1);
+        TR.appendChild(TD1);
+
+        let TD2 = document.createElement("td");
+        let TXT2 = document.createTextNode(activity);
+        TD2.appendChild(TXT2);
+        TR.appendChild(TD2);
+
+        let TD3 = document.createElement("td");
+        let TXT3 = document.createTextNode(Weight);
+        TD3.appendChild(TXT3);
+        TR.appendChild(TD3);
+
+        let TD4 = document.createElement("td");
+        let TXT4 = document.createTextNode("");
+        TD4.appendChild(TXT4);
+        TR.appendChild(TD4);
+
+        // Append row to table
+        let TBL = document.getElementById("theTable").getElementsByTagName("tbody")[0];
+        TBL.appendChild(TR);
+
+        // Clear input fields
+        ACT.value = "";
+        PER.value = "";
+    }
+
+    // Function to Add Grade to Existing Activity
+    function addGrade() {
+        let ERR = document.getElementById("ERR");
+
+        // Check if activities exist
+        if (noActivity == 0) {
+            ERR.innerHTML = "Error Message: No activities found";
+            return;
+        }
+
+        let GRD = document.getElementById("grade");
+        let grade = parseInt(GRD.value);
+
+        let ACTNO = document.getElementById("activityNo");
+        let activityNo = parseInt(ACTNO.value);
+
+        // Validate activity number input
+        if (isNaN(activityNo) || activityNo < 1 || activityNo > noActivity) {
+            ERR.innerHTML = "Error Message: Activity no is rejected";
+            return;
+        } else {
+            ERR.innerHTML = "Error Message: ";
+        }
+
+        // Get row and update grade
+        let TR = document.getElementsByTagName("tr");
+        let TD = TR[activityNo].getElementsByTagName("td");
+        let TXT = document.createTextNode(grade);
+
+        if (TD[3].hasChildNodes()) {
+            TD[3].removeChild(TD[3].firstChild);
+        }
+        TD[3].appendChild(TXT);
+
+        // Clear input fields
+        ACTNO.value = "";
+        GRD.value = "";
+    }
+
+    // Function to Delete the Last Activity
+    function deleteTask() {
+        let ERR = document.getElementById("ERR");
+
+        // Prevent deletion if no activities
+        if (noActivity === 0) {
+            ERR.innerHTML = "Error Message: No more activities to remove.";
+            return;
+        }
+
+        let TBL = document.getElementById("theTable").getElementsByTagName("tbody")[0];
+        TBL.deleteRow(noActivity - 1);
+        noActivity--;
+
+        ERR.innerHTML = "Error Message: ";
+    }
+
+    // Function to Delete a Specific Activity by Number
+    function deleteSpecificTask() {
+        let ERR = document.getElementById("ERR");
+
+        if (noActivity === 0) {
+            ERR.innerHTML = "Error Message: No activities found to delete.";
+            return;
+        }
+
+        let deleteActivityNo = parseInt(document.getElementById("deleteActivityNo").value);
+
+        // Validate activity number
+        if (isNaN(deleteActivityNo) || deleteActivityNo < 1 || deleteActivityNo > noActivity) {
+            ERR.innerHTML = "Error Message: Activity no is invalid.";
+            return;
+        }
+
+        let TBL = document.getElementById("theTable").getElementsByTagName("tbody")[0];
+        TBL.deleteRow(deleteActivityNo - 1);
+
+        // Re-index activity numbers
+        for (let i = deleteActivityNo - 1; i < noActivity - 1; i++) {
+            TBL.rows[i].cells[0].innerText = i + 1;
+        }
+
+        noActivity--;
+
+        ERR.innerHTML = "Error Message: ";
+        document.getElementById("deleteActivityNo").value = "";
+    }
+</script>
+
+</body>
+</html>
